@@ -1,0 +1,55 @@
+# Arquivos de compilação do Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ambiente virtual
+venv/
+ENV/
+env/
+.venv/
+.pyenv/
+.pipenv/
+.venv.bak/
+
+# Configurações de IDE/Editor
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Logs e bases de dados
+*.log
+*.sqlite3
+*.db
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de pacotes
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+wheels/
+
+# Arquivos de cobertura de testes
+.coverage
+*.cover
+coverage.xml
+.cache
+
+# Configuração do pytest
+.pytest_cache/
+
+# Pipfile e outras dependências geradas
+Pipfile.lock
+poetry.lock
+
+# Variaveis de ambiente
+.env
+
+# Celery
+celerybeat-schedule
