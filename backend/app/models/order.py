@@ -1,13 +1,11 @@
-from pydantic import BaseModel, Field
-from bson import ObjectId
-from .base import PyObjectId
+from pydantic import BaseModel, Field, UUID4
 from typing import List
 from datetime import datetime
 
 
 class OrderBase(BaseModel):
     date: datetime
-    product_ids: List[PyObjectId]
+    product_ids: List[UUID4]
     total: float
 
 
@@ -16,8 +14,8 @@ class OrderCreate(OrderBase):
 
 
 class Order(OrderBase):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: UUID4 = Field(default_factory=UUID4, alias="_id")
 
     class Config:
         populate_by_name = True
-        json_encoders = {ObjectId: str}
+        json_encoders = {UUID4: str}

@@ -1,6 +1,4 @@
-from pydantic import BaseModel, Field
-from bson import ObjectId
-from .base import PyObjectId
+from pydantic import BaseModel, Field, UUID4
 
 
 class CategoryBase(BaseModel):
@@ -12,8 +10,8 @@ class CategoryCreate(CategoryBase):
 
 
 class Category(CategoryBase):
-    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
+    id: UUID4 = Field(default_factory=UUID4, alias="_id")
     
     class Config:
         populate_by_name = True
-        json_encoders = {ObjectId: str}
+        json_encoders = {UUID4: str}
