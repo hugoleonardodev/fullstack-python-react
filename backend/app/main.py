@@ -4,7 +4,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from .routes import products, categories, orders
-from .seed import seed_database
+from .scripts.seed_database import seed_database
+from .services.s3 import S3Service
 
 load_dotenv()
 
@@ -31,6 +32,17 @@ async def startup_db_client():
     app.mongodb_client = AsyncIOMotorClient(MONGO_URI)
     app.mongodb = app.mongodb_client[DB_NAME]
     await seed_database()  # Run the database seed
+
+# S3 Service
+@app.on_event("startup")
+async def startup_s3_client():
+    app.s3_service = S3Service(
+        aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID", "test"),
+        aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY", "test"),
+        region_name=os.getenv("AWS_DEFAULT_REGION", "us-east-1"),
+        endpoint_url=os.getenv("AWS_ENDPOINT_URL", "http://localhost:4566"),
+        bucket_name=os.getenv("S3_BUCKET_NAME", "product-images")
+    )
 
 
 @app.on_event("shutdown")
