@@ -1,4 +1,6 @@
-from pydantic import BaseModel, Field, UUID4
+from pydantic import BaseModel, Field
+# from bson import ObjectId
+from .base import PyObjectId
 from typing import List, Optional
 
 
@@ -6,7 +8,7 @@ class ProductBase(BaseModel):
     name: str
     description: str
     price: float
-    category_ids: List[UUID4]
+    category_ids: List[PyObjectId]
     image_url: Optional[str] = None
 
 
@@ -15,8 +17,8 @@ class ProductCreate(ProductBase):
 
 
 class Product(ProductBase):
-    id: UUID4 = Field(default_factory=UUID4, alias="_id")
+    id: PyObjectId = Field(default_factory=PyObjectId, alias="_id")
 
     class Config:
         populate_by_name = True
-        json_encoders = {UUID4: str}
+        json_encoders = {PyObjectId: lambda x: str(x)}
