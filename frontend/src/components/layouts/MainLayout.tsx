@@ -1,6 +1,6 @@
 // src/layouts/MainLayout.js
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Link, Outlet } from 'react-router-dom';
 import { 
   AppBar, 
   Box, 
@@ -62,12 +62,30 @@ const MainLayout = () => {
       </Toolbar>
       <Divider />
       <List>
-        <ListItem button component="a" href="/">
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
+        <Link to="/">
+          <ListItem>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Dashboard" />
+          </ListItem>
+        </Link>
+        <Link to="/products">
+          <ListItem>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Produtos" />
+          </ListItem>
+        </Link>
+        <Link to="/orders">
+          <ListItem>
+              <ListItemIcon>
+                <DashboardIcon />
+              </ListItemIcon>
+              <ListItemText primary="Compras" />
+          </ListItem>
+        </Link>
         {/* Add more navigation items here */}
       </List>
     </Box>
