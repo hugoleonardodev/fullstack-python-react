@@ -13,7 +13,7 @@ MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME = os.getenv("DB_NAME")
 
 
-app = FastAPI(title="E-commerce API")
+app = FastAPI(title="FastAPI+MongoDB+S3+LocalStack", version="0.1.0")
 
 
 # CORS configuration
@@ -41,7 +41,7 @@ async def startup_s3_client():
         aws_access_key_id=os.getenv("AWS_ACCESS_KEY_ID", "test"),
         aws_secret_access_key=os.getenv("AWS_SECRET_ACCESS_KEY", "test"),
         region_name=os.getenv("AWS_DEFAULT_REGION", "us-east-1"),
-        endpoint_url=os.getenv("AWS_ENDPOINT_URL", "http://localhost:4566"),
+        endpoint_url=os.getenv("AWS_ENDPOINT_URL", "http://0.0.0.0:4566"),
         bucket_name=os.getenv("S3_BUCKET_NAME", "product-images")
     )
 

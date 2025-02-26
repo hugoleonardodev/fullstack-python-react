@@ -11,9 +11,10 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+import { Link } from "react-router-dom";
 
 type Product = {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
@@ -25,13 +26,18 @@ const ListProducts = () => {
   const [products, setProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:8000/products")
+    fetch("http://0.0.0.0:8000/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products:", err));
   }, []);
 
+  console.log("Products:", products);
+
   return (
+    <Box sx={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+    <Link to="/products/create" style={{ textDecoration: "none" }}>New Product</Link>
+
     <TableContainer component={Paper} sx={{ mt: 4 }}>
       <Table>
         <TableHead>
@@ -46,12 +52,13 @@ const ListProducts = () => {
         <TableBody>
           {products.length > 0 ? (
             products.map((product) => (
-              <TableRow key={product.id}>
+              <TableRow key={product._id}>
                 <TableCell>
+                {/* <Avatar src={product.image_url} alt={product.name} /> */}
                   {product.image_url ? (
                     <Avatar src={product.image_url} alt={product.name} />
                   ) : (
-                    <Avatar>{product.name.charAt(0)}</Avatar>
+                    <Avatar>{product.name.charAt(0).toUpperCase()}</Avatar>
                   )}
                 </TableCell>
                 <TableCell>
@@ -78,6 +85,7 @@ const ListProducts = () => {
         </TableBody>
       </Table>
     </TableContainer>
+    </Box>
   );
 };
 

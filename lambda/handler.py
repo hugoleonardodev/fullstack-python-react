@@ -19,9 +19,11 @@ s3 = boto3.client('s3')
 SNS_TOPIC_ARN = os.environ.get('SNS_TOPIC_ARN')
 S3_BUCKET = os.environ.get('S3_BUCKET')
 
+
 def get_mongo_client():
     """Create and return a MongoDB client."""
     return pymongo.MongoClient(MONGO_URI)
+
 
 def process_new_order(order_data):
     """
@@ -45,6 +47,7 @@ def process_new_order(order_data):
     )
     
     logger.info(f"Notification sent for order: {order_data.get('_id')}")
+
 
 def generate_sales_report():
     """
@@ -98,6 +101,7 @@ def generate_sales_report():
         "report_location": f"s3://{S3_BUCKET}/{report_key}",
         "summary": report
     }
+
 
 def lambda_handler(event, context):
     """

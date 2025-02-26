@@ -1,7 +1,7 @@
+from typing import List, Optional
 from pydantic import BaseModel, Field
 # from bson import ObjectId
 from .base import PyObjectId
-from typing import List, Optional
 
 
 class ProductBase(BaseModel):
@@ -13,7 +13,11 @@ class ProductBase(BaseModel):
 
 
 class ProductCreate(ProductBase):
-    pass
+    name: str
+    description: str
+    price: float
+    category_ids: List[str]
+    image_url: Optional[str] = None
 
 
 class Product(ProductBase):

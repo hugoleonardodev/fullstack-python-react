@@ -22,6 +22,8 @@ services:
       - DEFAULT_REGION=us-east-1
       - AWS_ACCESS_KEY_ID=test
       - AWS_SECRET_ACCESS_KEY=test
+      - HOSTNAME_EXTERNAL=0.0.0.0
+      - USE_SSL=false
     volumes:
       - localstack_data:/var/tmp/localstack
 

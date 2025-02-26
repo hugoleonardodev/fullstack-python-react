@@ -9,7 +9,10 @@ import {
   Container,
   Box,
 } from "@mui/material";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
 import { useForm, Controller } from "react-hook-form";
+
 
 type ProductFormData = {
   name: string;
@@ -17,36 +20,88 @@ type ProductFormData = {
   price: number;
   category_ids: string[]; // Using strings for category IDs
   image_url?: string;
+  image_file?: File;
 };
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 const ProductForm = () => {
   const { control, handleSubmit, register } = useForm<ProductFormData>();
-  const [categories] = useState([
-    { id: "60f7d4c1e1c9a6a1e4b3b3b3", name: "Category 1" },
-    { id: "60f7d4c1e1c9a6a1e4b3b3b4", name: "Category 2" },
-  ]);
+  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
+        setImageFile(file);
+        setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
+  const handleUpload = async () => {
+      if (!imageFile) return;
+      const formData = new FormData();
+      formData.append("file", imageFile);
+
+      try {
+          const response = await fetch("http://localhost:8000/api/products/image/upload", {
+              method: "POST",
+              body: formData
+          });
+          console.log("File uploaded:", response.status);
+          return response.json();
+      } catch (error) {
+          console.error("Upload failed:", error);
+      }
+  };
+
 
   const onSubmit = async (data: ProductFormData) => {
     console.log("Submitting:", data);
 
+    const { image_url } = await handleUpload();
+
+
+    console.log("imageUrl", image_url);
+
+    const dataWithImage = {
+      ...data,
+      image_url: image_url.replace("localstack", "0.0.0.0"),
+    };
+
+    console.log("Data with image:", dataWithImage);
+
     try {
-      const response = await fetch("http://0.0.0.0:8000/products", {
+      await fetch("http://0.0.0.0:8000/api/products", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataWithImage),
       });
-
-      if (response.ok) {
-        alert("Product created successfully!");
-      } else {
-        alert("Error creating product.");
-      }
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  React.useEffect(() => {
+    console.log("Categories:", categories);
+    fetch("http://localhost:8000/api/categories")
+    .then((res) => res.json())
+    .then((data) => setCategories(data))
+    .catch((err) => console.error("Error fetching products:", err));
+  }, []);
 
   return (
     <Container maxWidth="sm">
@@ -82,7 +137,7 @@ const ProductForm = () => {
             render={({ field }) => (
               <Select {...field} multiple>
                 {categories.map((category) => (
-                  <MenuItem key={category.id} value={category.id}>
+                  <MenuItem key={category._id} value={category._id}>
                     {category.name}
                   </MenuItem>
                 ))}
@@ -91,12 +146,23 @@ const ProductForm = () => {
           />
         </FormControl>
 
-        <TextField
-          label="Image URL"
-          fullWidth
-          margin="normal"
-          {...register("image_url")}
-        />
+        {imagePreview && <img src={imagePreview} alt="Preview" width={100} style={{ marginTop: 10 }} />}
+
+        <Button
+          component="label"
+          role={undefined}
+          variant="contained"
+          tabIndex={-1}
+          startIcon={<CloudUploadIcon />}
+        >
+          Upload files
+          <VisuallyHiddenInput
+            type="file"
+            multiple
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+        </Button>
 
         <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
           Submit

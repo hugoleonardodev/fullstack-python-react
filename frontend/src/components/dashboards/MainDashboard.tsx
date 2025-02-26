@@ -68,7 +68,7 @@ const MainDashboard = () => {
             <AttachMoneyIcon sx={{ fontSize: 40, mr: 2, color: "green" }} />
             <Box>
               <Typography variant="h6">Valor Médio por Pedido</Typography>
-              <Typography variant="h4">${averageOrderValue.toFixed(2)}</Typography>
+              <Typography variant="h4">$ {averageOrderValue.toFixed(2)}</Typography>
             </Box>
           </Paper>
         </Grid>
@@ -78,7 +78,7 @@ const MainDashboard = () => {
             <ReceiptIcon sx={{ fontSize: 40, mr: 2, color: "red" }} />
             <Box>
               <Typography variant="h6">Receita Total</Typography>
-              <Typography variant="h4">${totalRevenue.toFixed(2)}</Typography>
+              <Typography variant="h4">$ {totalRevenue.toFixed(2)}</Typography>
             </Box>
           </Paper>
         </Grid>

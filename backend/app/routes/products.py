@@ -1,45 +1,49 @@
 # backend/app/routes/products.py
 import json
+# import boto3
 from typing import List, Optional
-from fastapi import APIRouter, Request, HTTPException, status, UploadFile, File, Form
+from fastapi import APIRouter, Request, HTTPException, status, UploadFile, Form
 from fastapi.encoders import jsonable_encoder
-from ..models.product import Product
+from ..models.product import Product, ProductCreate
 
 router = APIRouter()
+
+# LocalStack S3 Configuration (Docker running on localhost:4566)
+LOCALSTACK_URL = "http://0.0.0.0:4566"
+ACCESS_KEY = "test"  # Default LocalStack credentials
+SECRET_KEY = "test"
+BUCKET_NAME = "product-images"
 
 
 @router.post("/", response_model=Product)
 async def create_product(
     request: Request,
-    name: str = Form(...),
-    description: str = Form(...),
-    price: float = Form(...),
-    category_ids: str = Form(...),  # JSON string de IDs
-    image: Optional[UploadFile] = File(None)
+    product: ProductCreate,
 ):
     # Parsear category_ids de JSON string para lista
-    try:
-        category_ids_list = json.loads(category_ids)
-    except:
-        raise HTTPException(status_code=400, detail="Invalid category_ids format")
+    # try:
+    #     category_ids_list = json.loads(product.category_ids)
+    # except:
+    #     raise HTTPException(status_code=400, detail="Invalid category_ids format")
     
     # Criar objeto do produto
     product_data = {
-        "name": name,
-        "description": description,
-        "price": price,
-        "category_ids": category_ids_list,
-        "image_url": None
+        "name": product.name,
+        "description": product.description,
+        "price": product.price,
+        "category_ids": product.category_ids,
+        "image_url": product.image_url
     }
     
     # Upload da imagem se fornecida
-    if image:
-        image_url = await request.app.s3_service.upload_file(image)
-        product_data["image_url"] = image_url
+    # if product.image_file is not None:
+    #     image_url = await request.app.s3_service.upload_file(product.image_file)
+    #     product_data["image_url"] = image_url
     
+
     # Inserir produto no banco de dados
-    product = jsonable_encoder(product_data)
-    new_product = await request.app.mongodb["products"].insert_one(product)
+    product_data = jsonable_encoder(product_data)
+    new_product = await request.app.mongodb["products"].insert_one(product_data)
     created_product = await request.app.mongodb["products"].find_one(
         {"_id": new_product.inserted_id}
     )
@@ -54,7 +58,7 @@ async def update_product(
     description: Optional[str] = Form(None),
     price: Optional[float] = Form(None),
     category_ids: Optional[str] = Form(None),  # JSON string de IDs
-    image: Optional[UploadFile] = File(None)
+    image: Optional[UploadFile] = Form(None),
 ):
     # Construir o dicionário de atualização
     update_data = {}
@@ -111,3 +115,11 @@ async def delete_product(id: str, request: Request):
     if delete_result.deleted_count == 1:
         return {"message": f"Product {id} deleted"}
     raise HTTPException(status_code=404, detail=f"Product {id} not found")
+
+
+@router.post("/image/upload")
+async def upload_file(request: Request, file: UploadFile = Form(None)):
+    """Upload file to LocalStack S3 bucket"""
+    image_url = await request.app.s3_service.upload_file(file)
+    # file_url = f"{LOCALSTACK_URL}/{BUCKET_NAME}/{file.filename}"
+    return {"image_url": image_url}
