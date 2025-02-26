@@ -9,6 +9,7 @@ class OrderBase(BaseModel):
     date: datetime
     product_ids: List[PyObjectId]
     total: float
+    category_ids: List[PyObjectId]
 
 
 class OrderCreate(OrderBase):

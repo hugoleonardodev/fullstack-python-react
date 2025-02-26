@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from .routes import products, categories, orders
+from .routes import products, categories, orders, dashboard
 from .scripts.seed_database import seed_database
 from .services.s3 import S3Service
 
@@ -19,7 +19,7 @@ app = FastAPI(title="E-commerce API")
 # CORS configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React frontend
+    allow_origins=["http://localhost:3000", "http://localhost:3001"],  # React frontend
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,7 +31,7 @@ app.add_middleware(
 async def startup_db_client():
     app.mongodb_client = AsyncIOMotorClient(MONGO_URI)
     app.mongodb = app.mongodb_client[DB_NAME]
-    await seed_database()  # Run the database seed
+    seed_database()  # Run the database seed
 
 
 # S3 Service
@@ -54,6 +54,7 @@ async def shutdown_db_client():
 app.include_router(products.router, prefix="/api/products", tags=["products"])
 app.include_router(categories.router, prefix="/api/categories", tags=["categories"])
 app.include_router(orders.router, prefix="/api/orders", tags=["orders"])
+app.include_router(dashboard.router, prefix="/api/dashboard", tags=["dashboard"])
 
 
 # Health check endpoint

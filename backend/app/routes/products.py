@@ -1,11 +1,12 @@
 # backend/app/routes/products.py
-from fastapi import APIRouter, Body, Request, HTTPException, status, UploadFile, File, Form
-from fastapi.encoders import jsonable_encoder
-from typing import List, Optional
-from ..models.product import Product, ProductCreate
 import json
+from typing import List, Optional
+from fastapi import APIRouter, Request, HTTPException, status, UploadFile, File, Form
+from fastapi.encoders import jsonable_encoder
+from ..models.product import Product
 
 router = APIRouter()
+
 
 @router.post("/", response_model=Product)
 async def create_product(
@@ -43,6 +44,7 @@ async def create_product(
         {"_id": new_product.inserted_id}
     )
     return created_product
+
 
 @router.put("/{id}", response_model=Product)
 async def update_product(
@@ -89,16 +91,19 @@ async def update_product(
         raise HTTPException(status_code=404, detail=f"Product {id} not found")
     return updated_product
 
+
 @router.get("/", response_model=List[Product])
 async def list_products(request: Request):
     products = await request.app.mongodb["products"].find().to_list(1000)
     return products
+
 
 @router.get("/{id}", response_model=Product)
 async def get_product(id: str, request: Request):
     if (product := await request.app.mongodb["products"].find_one({"_id": id})) is not None:
         return product
     raise HTTPException(status_code=404, detail=f"Product {id} not found")
+
 
 @router.delete("/{id}", response_model=dict)
 async def delete_product(id: str, request: Request):
