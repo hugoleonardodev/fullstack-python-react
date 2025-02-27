@@ -2,6 +2,12 @@
 
 É necessário ter aws, aws-sam-cli, docker, docker-compose, node.js, python 3 instalados no seu computador para executar a aplicação.
 
+## Variáveis de ambiente
+
+```
+MONGO_URI=mongodb://mongo:27017
+DB_NAME=fastapi_db
+```
 
 ## Como executar a aplicação
 
