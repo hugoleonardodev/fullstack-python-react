@@ -64,6 +64,7 @@ resources:
       Type: AWS::SNS::Topic
       Properties:
         TopicName: ecommerce-orders-notifications
+        Handler: handler.process_new_order
         
     ReportsBucket:
       Type: AWS::S3::Bucket

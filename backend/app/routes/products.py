@@ -1,18 +1,10 @@
-# backend/app/routes/products.py
 import json
-# import boto3
 from typing import List, Optional
 from fastapi import APIRouter, Request, HTTPException, status, UploadFile, Form
 from fastapi.encoders import jsonable_encoder
 from ..models.product import Product, ProductCreate
 
 router = APIRouter()
-
-# LocalStack S3 Configuration (Docker running on localhost:4566)
-LOCALSTACK_URL = "http://0.0.0.0:4566"
-ACCESS_KEY = "test"  # Default LocalStack credentials
-SECRET_KEY = "test"
-BUCKET_NAME = "product-images"
 
 
 @router.post("/", response_model=Product)
@@ -34,12 +26,6 @@ async def create_product(
         "category_ids": product.category_ids,
         "image_url": product.image_url
     }
-    
-    # Upload da imagem se fornecida
-    # if product.image_file is not None:
-    #     image_url = await request.app.s3_service.upload_file(product.image_file)
-    #     product_data["image_url"] = image_url
-    
 
     # Inserir produto no banco de dados
     product_data = jsonable_encoder(product_data)

@@ -60,7 +60,8 @@ const ProductForm = () => {
               body: formData
           });
           console.log("File uploaded:", response.status);
-          return response.json();
+          const result = await response.json();
+          return result;
       } catch (error) {
           console.error("Upload failed:", error);
       }

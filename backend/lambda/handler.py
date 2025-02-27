@@ -1,8 +1,8 @@
 import json
 import os
-import boto3
-import logging
 from datetime import datetime
+import logging
+import boto3
 import pymongo
 
 # Configure logging

@@ -13,7 +13,10 @@ class OrderBase(BaseModel):
 
 
 class OrderCreate(OrderBase):
-    pass
+    date: str
+    product_ids: List[str]
+    total: str
+    category_ids: List[str]
 
 
 class Order(OrderBase):
