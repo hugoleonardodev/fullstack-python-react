@@ -43,19 +43,19 @@ services:
       - mongodb
       - localstack
 
-  # frontend:
-  #   build: ./frontend
-  #   ports:
-  #     - "3000:3000"
-  #   depends_on:
-  #     - backend
-  #   environment:
-  #     - REACT_APP_API_URL=http://localhost:8000/api
-    # networks:
-    #   - app-network
-    # networks:
-    #   app-network:
-    #     driver: bridge
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000/api
+    networks:
+      - app-network
+    networks:
+      app-network:
+        driver: bridge
 volumes:
   mongodb_data:
   localstack_data:
