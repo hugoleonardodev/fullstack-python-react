@@ -1,10 +1,11 @@
-# backend/app/services/s3.py
+"""S3 Service module"""
 import uuid
 import boto3
 from fastapi import UploadFile
 
 
 class S3Service:
+    """S3 Service class"""
     def __init__(self, aws_access_key_id: str, aws_secret_access_key: str, 
                  region_name: str, endpoint_url: str, bucket_name: str):
         self.s3_client = boto3.client(

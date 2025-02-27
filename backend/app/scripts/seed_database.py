@@ -1,3 +1,4 @@
+"""Script to seed the database with sample data."""
 import os
 from pymongo import MongoClient
 from bson import ObjectId
@@ -13,7 +14,7 @@ db = client[DB_NAME]
 
 
 def seed_database():
-    # Clear existing collections
+    """Seed the database with sample data."""
     db.categories.delete_many({})
     db.products.delete_many({})
     db.orders.delete_many({})
@@ -116,7 +117,7 @@ def seed_database():
         # order_products = random.sample(products_from_db, random.randint(1, 5))
         product_ids = [str(p["_id"]) for p in products_from_db]
         
-        category_ids = [str(p["category_ids"][0]) for p in products_from_db]
+        # category_ids = [str(p["category_ids"][0]) for p in products_from_db]
 
         print("product_ids", product_ids)
         # Calculate total
@@ -128,7 +129,7 @@ def seed_database():
             "_id": ObjectId(),
             "date": order_date,
             "product_ids": product_ids,
-            "category_ids": category_ids,
+            # "category_ids": category_ids,
             "total": round(total, 2)
         })
     

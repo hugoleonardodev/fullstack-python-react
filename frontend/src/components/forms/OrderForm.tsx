@@ -21,18 +21,12 @@ type OrderFormData = {
 const OrderForm = () => {
   const { control, handleSubmit, register } = useForm<OrderFormData>();
   const [products, setProducts] = useState<{ _id: string; name: string }[]>([]);
-  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
 
   useEffect(() => {
     fetch("http://localhost:8000/api/products")
       .then((res) => res.json())
       .then((data) => setProducts(data))
       .catch((err) => console.error("Error fetching products:", err));
-
-    fetch("http://localhost:8000/api/categories")
-      .then((res) => res.json())
-      .then((data) => setCategories(data))
-      .catch((err) => console.error("Error fetching categories:", err));
   }, []);
 
   const onSubmit = async (data: OrderFormData) => {
@@ -79,24 +73,6 @@ const OrderForm = () => {
                 {products.map((product) => (
                   <MenuItem key={product._id} value={product._id}>
                     {product.name}
-                  </MenuItem>
-                ))}
-              </Select>
-            )}
-          />
-        </FormControl>
-
-        <FormControl fullWidth margin="normal">
-          <InputLabel>Categories</InputLabel>
-          <Controller
-            name="category_ids"
-            control={control}
-            defaultValue={[]}
-            render={({ field }) => (
-              <Select {...field} multiple>
-                {categories.map((category) => (
-                  <MenuItem key={category._id} value={category._id}>
-                    {category.name}
                   </MenuItem>
                 ))}
               </Select>

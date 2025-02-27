@@ -44,7 +44,6 @@ const ListOrders = () => {
               <TableCell>Date</TableCell>
               <TableCell>Products</TableCell>
               <TableCell>Total</TableCell>
-              <TableCell>Categories</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -64,13 +63,6 @@ const ListOrders = () => {
                     </Box>
                   </TableCell>
                   <TableCell>${order.total.toFixed(2)}</TableCell>
-                  <TableCell>
-                    <Box>
-                      {order.category_ids.length > 0
-                        ? order.category_ids.join(", ")
-                        : "No categories"}
-                    </Box>
-                  </TableCell>
                 </TableRow>
               ))
             ) : (
