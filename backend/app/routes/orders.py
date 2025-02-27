@@ -33,6 +33,7 @@ async def create_order(request: Request, order: OrderCreate = Body(...)):
     created_order = await request.app.mongodb["orders"].find_one(
         {"_id": new_order.inserted_id}
     )
+    # await generate_sales_report()
     return created_order
 
 
