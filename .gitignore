@@ -56,3 +56,4 @@ poetry.lock
 
 # Celery
 celerybeat-schedule
+*storybook.log

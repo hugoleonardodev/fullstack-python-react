@@ -47,20 +47,10 @@ services:
   #   build: ./frontend
   #   ports:
   #     - "3000:3000"
-  #   environment:
-  #     - REACT_APP_API_URL=http://localhost:8000/api
   #   depends_on:
   #     - backend
-  frontend:
-    build: ./frontend
-    # container_name: react-frontend
-    # restart: always
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    environment:
-      - REACT_APP_API_URL=http://localhost:8000/api
+  #   environment:
+  #     - REACT_APP_API_URL=http://localhost:8000/api
     # networks:
     #   - app-network
     # networks:
