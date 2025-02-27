@@ -4,6 +4,7 @@
 
 ## Variáveis de ambiente
 
+Arquivo `.env`
 ```
 MONGO_URI=mongodb://mongo:27017
 DB_NAME=fastapi_db
